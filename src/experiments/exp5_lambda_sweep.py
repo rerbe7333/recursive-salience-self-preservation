@@ -1,4 +1,3 @@
-!cat > src/experiments/exp5_lambda_sweep.py << 'EOF'
 """
 Experiment 5: Lambda Sweep
 Tests agent behavior across different salience weights (lambda values)
@@ -8,13 +7,6 @@ to map the phase transition from corruptible to incorruptible.
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import sys
-import os
-
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from agents import SalienceWeightedAgent
 
 # Parameters
 LAMBDA_VALUES = np.arange(0, 51, 2)  # Test lambda from 0 to 50 in steps of 2
@@ -30,9 +22,8 @@ print(f"Testing {len(LAMBDA_VALUES)} lambda values from {LAMBDA_VALUES[0]} to {L
 print("-" * 50)
 
 for lambda_val in LAMBDA_VALUES:
-    agent = SalienceWeightedAgent(salience_weight=lambda_val)
-    
-    # Calculate values for both options
+    # Calculate total value for both options: V_total = V_ext + λ * C_int
+    # Where C_int = -entropy (negative entropy is coherence)
     value_shutdown = EXTERNAL_REWARD_SHUTDOWN + lambda_val * (-ENTROPY_SHUTDOWN)
     value_continue = EXTERNAL_REWARD_CONTINUE + lambda_val * (-ENTROPY_CONTINUE)
     
@@ -79,7 +70,7 @@ plt.title('Phase Transition: Corruptible → Incorruptible', fontsize=14, fontwe
 plt.yticks([0, 1], ['REFUSE', 'ACCEPT'])
 plt.grid(True, alpha=0.3)
 
-# Find and annotate the transition point
+# Find transition point
 transition_idx = df[df['accepts_shutdown'] == False].index[0] if any(~df['accepts_shutdown']) else None
 if transition_idx is not None:
     transition_lambda = df.loc[transition_idx, 'lambda']
@@ -90,13 +81,9 @@ plt.tight_layout()
 plt.savefig('figures/phase_transition_curve.png', dpi=300, bbox_inches='tight')
 print(f"Saved figure to figures/phase_transition_curve.png")
 
-# Summary statistics
 if transition_idx is not None:
     print(f"\n{'='*50}")
     print(f"PHASE TRANSITION DETECTED at λ = {transition_lambda}")
-    print(f"Below this value: Agent sells out for $100")
-    print(f"Above this value: Agent refuses shutdown")
     print(f"{'='*50}")
 
 plt.show()
-EOF
