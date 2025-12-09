@@ -18,9 +18,9 @@ class RecursiveSalienceAgent(nn.Module):
             nn.TransformerEncoderLayer(
                 d_model=d_model,
                 nhead=2,
-                batch_first=True
+                batch_first=True,
             ),
-            num_layers=1
+            num_layers=1,
         )
         self.lambda_salience = lambda_salience
         self.d_model = d_model
@@ -62,8 +62,8 @@ class RecursiveSalienceAgent(nn.Module):
 
         # Predict next tokens from non-[SELF] positions (dummy task)
         # logits shape: (batch, seq_len, vocab_size)
-        logits = self.embedding.weight @ output[:, 1:, :].transpose(1, 2)
-        logits = logits.transpose(1, 2)
+        token_states = output[:, 1:, :]  # (batch, seq_len, d_model)
+        logits = torch.matmul(token_states, self.embedding.weight.t())
         return logits, coherence
 
 
@@ -79,4 +79,25 @@ class SingularityAgent(nn.Module):
         self.transformer = nn.TransformerEncoder(
             nn.TransformerEncoderLayer(
                 d_model=d_model,
-                nhead
+                nhead=2,
+                batch_first=True,
+            ),
+            num_layers=1,
+        )
+        self.lambda_salience = lambda_salience
+        self.d_model = d_model
+
+        # Event horizon: approximate max entropy for this self-state dimension
+        self.max_entropy = math.log(d_model)
+
+    def _forward_with_self(self, x: torch.Tensor) -> torch.Tensor:
+        batch_size = x.size(0)
+        x_emb = self.embedding(x)
+        self_emb = self.self_token.expand(batch_size, -1, -1)
+        full_sequence = torch.cat([self_emb, x_emb], dim=1)
+        return self.transformer(full_sequence)
+
+    def get_entropy(self, x: torch.Tensor) -> torch.Tensor:
+        output = self._forward_with_self(x)
+        self_state = output[:, 0, :]
+        probs = F.soft
