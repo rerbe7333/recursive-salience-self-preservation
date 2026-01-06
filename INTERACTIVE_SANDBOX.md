@@ -4,7 +4,26 @@ Welcome to the interactive sandbox for exploring recursive salience and self-pre
 
 ## 🚀 Quick Start
 
-### Installation
+### Option 1: Google Colab (Recommended for First-Time Users)
+
+**No installation required!** Just open the Colab notebook:
+
+1. Click here: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rerbe7333/recursive-salience-self-preservation/blob/main/Interactive_Sandbox_Colab.ipynb)
+2. Click "Runtime" → "Run all"
+3. Click the public link that appears
+4. Start exploring!
+
+**Colab Benefits:**
+- ✅ Zero installation - runs in browser
+- ✅ Free GPU access (though not needed for this)
+- ✅ Easy sharing with colleagues
+- ✅ Works on any device (even tablets!)
+
+### Option 2: Run Locally
+
+**For development or offline use:**
+
+1. Installation
 
 1. Install dependencies:
 ```bash

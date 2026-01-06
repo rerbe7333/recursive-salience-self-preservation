@@ -15,6 +15,13 @@ All experiments run on CPU-only PyTorch (no special hardware, no paid APIs).
 
 **Want to explore these concepts hands-on?** Try the interactive web-based sandbox!
 
+### Option 1: Google Colab (Easiest - No Installation!)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rerbe7333/recursive-salience-self-preservation/blob/main/Interactive_Sandbox_Colab.ipynb)
+
+Click the badge above or open `Interactive_Sandbox_Colab.ipynb` in Colab - runs in your browser with zero setup!
+
+### Option 2: Run Locally
+
 ```bash
 pip install -r requirements.txt
 python interactive_sandbox.py
@@ -56,7 +63,8 @@ so that states near maximum entropy (shutdown / chaos) carry huge negative value
 ## Repository structure
 
 ```text
-interactive_sandbox.py      # 🎮 NEW: Interactive web-based sandbox
+interactive_sandbox.py      # 🎮 NEW: Interactive web-based sandbox (local)
+Interactive_Sandbox_Colab.ipynb  # 🎮 NEW: Colab-ready interactive notebook
 launch_sandbox.sh          # Quick launcher script for sandbox
 INTERACTIVE_SANDBOX.md     # Detailed guide for interactive experiments
 
